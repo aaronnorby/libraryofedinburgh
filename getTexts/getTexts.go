@@ -1,4 +1,4 @@
-package loe
+package getTexts
 
 import (
   "io/ioutil"
