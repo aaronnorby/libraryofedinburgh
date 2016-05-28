@@ -2,7 +2,6 @@ package getTexts
 
 import (
   "io/ioutil"
-  "log"
   "net/http"
 )
 
@@ -31,13 +30,14 @@ func SaveTextToDisk(text []byte, fileName string) error {
   return nil
 }
 
-func GetAndSave() {
+func GetAndSave() error {
   text, err := GetText(treatiseUrl)
   if err != nil {
-    log.Fatal(err)
+    return err
   }
   writeErr := SaveTextToDisk(text, "treatise.txt")
   if writeErr != nil {
-    log.Fatal(writeErr)
+    return writeErr
   }
+  return nil
 }
