@@ -2,16 +2,18 @@
 package bookmaker
 
 import (
-  "bytes"
   "fmt"
   "io/ioutil"
+  "math/rand"
   "os"
   "strings"
+  "time"
 )
 
 func makeBook(fileName string) ([]byte, error) {
   // makeBook takes a text file and generates a permutation of the words in that
   // text. Note that each continuous whitespace counts as a word.
+  // At this point, it simply returns a randomly shuffled version of the text
   file, err := os.Open(fileName)
   defer file.Close()
   if err != nil {
@@ -25,17 +27,47 @@ func makeBook(fileName string) ([]byte, error) {
   }
 
   // now we want a string slice of all the words, including whitespace 'words'
-  // first, we split by spaces
-  // this isn't right because it's going to leave whitespace behind
-  wordsAndSpaces := strings.Split(string(text), " ")
+  // first, we count the number of newline characters, so we can add these back in
+  // later
+  newlinesCount := countNewlines(text)
 
-  // next, we loop through to make words
-  // to create whitespace words we use bytes.Buffer.WriteString method
-  //  var word bytes.Buffer
-  //  for whitespaceword {
-  //    word.WriteString(whitespaceword)
-  //  }
-  //  whitespace := buffer.String()
+  words := strings.Fields(string(text))
 
-  return nil, nil
+  // add newline chars back to our string slice
+  for i := 0; i < newlinesCount; i++ {
+    words = append(words, "\n")
+  }
+
+  // at this point, words in a string slice of all the words and newlines in the
+  // text.
+  shuffledWords := shuffle(words)
+  wordsAsByteSlice := []byte(strings.Join(shuffledWords, " "))
+
+  return wordsAsByteSlice, nil
+}
+
+func countNewlines(s []byte) int {
+  var newlines int
+  for _, char := range s {
+    if string(char) == "\n" {
+      newlines++
+    }
+  }
+  return newlines
+}
+
+func shuffle(words []string) []string {
+  // shuffle performs a shiffer-yates shuffle on words and returns a new shuffled
+  // []string
+  n := len(words)
+  result := make([]string, n)
+  rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+  for i := 0; i < n; i++ {
+    j := rng.Intn(i+1)
+    if j != i {
+      result[i] = result[j]
+    }
+    result[j] = words[i]
+  }
+  return result
 }
