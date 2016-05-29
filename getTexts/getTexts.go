@@ -1,6 +1,9 @@
+// Package getTexts provides methods for fetching and saving a copy of Hume's
+// Treatise from Project Gutenberg
 package getTexts
 
 import (
+  "fmt"
   "io/ioutil"
   "net/http"
 )
@@ -13,19 +16,19 @@ const (
 func GetText(url string) ([]byte, error) {
   resp, err := http.Get(url)
   if err != nil {
-    return nil, err
+    return nil, fmt.Errorf("error in GetText calling %s: %v", url, err)
   }
   defer resp.Body.Close()
   body, err := ioutil.ReadAll(resp.Body)
   if err != nil {
-    return nil, err
+    return nil, fmt.Errorf("error in GetText reading response body: %v", err)
   }
   return body, nil
 }
 
 func SaveTextToDisk(text []byte, fileName string) error {
-  err := ioutil.WriteFile(fileName, text, 0777); if err != nil {
-    return err
+ if err := ioutil.WriteFile(fileName, text, 0777); err != nil {
+    return fmt.Errorf("error writing text to disk: %v", err)
   }
   return nil
 }

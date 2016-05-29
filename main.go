@@ -1,9 +1,13 @@
 package main
 
 import (
+  "log"
+
   "library-of-edinburgh/getTexts"
 )
 
 func main() {
-  getTexts.GetAndSave()
+  err := getTexts.GetAndSave(); if err != nil {
+    log.Fatal(err)
+  }
 }
