@@ -5,11 +5,11 @@ import (
 )
 
 func TestCountNewlines(t *testing.T) {
-  words := "the\ncat and the\n hat"
-  numNewlines := countNewlines([]byte(words))
-  expected := 2
-  if numNewlines != expected {
-    t.Errorf("countNewlines(%v) == %v, expected %v", words, numNewlines, expected)
+  words := "the\n\ncat and the\n hat"
+  numNewlines := countNewlinesRun([]byte(words))
+  expected := 1
+  if numNewlines[2] != expected {
+    t.Errorf("countNewlines(%v) == %v, expected %v", words, numNewlines[2], expected)
   }
 }
 
