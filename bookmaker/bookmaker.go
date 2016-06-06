@@ -1,10 +1,12 @@
-// Package bookmaker generates permutations of a given text
+// Package bookmaker generates permutations of a given text. The new permutation is
+// based on the previous position of the words in the text.
 package bookmaker
 
 import (
   "bytes"
   "fmt"
   "io/ioutil"
+  "math"
   "math/rand"
   "os"
   "strings"
@@ -76,11 +78,17 @@ func countNewlinesRun(s []byte) map[int]int {
 func shuffle(words []string) []string {
   // shuffle performs a shiffer-yates shuffle on words and returns a new shuffled
   // []string
+  // But instead of a pure random shuffle, we want to new position of a word to be
+  // based on its previous position. To do this, we use a normal distribution with
+  // a mean equal to the prior position of the word and a std dev equal to 10% of
+  // the total text word count.
+  var stdv float64 = 0.10 * float64(len(words)) // std deviation for normal dist used below
   n := len(words)
   result := make([]string, n)
   rng := rand.New(rand.NewSource(time.Now().UnixNano()))
   for i := 0; i < n; i++ {
-    j := rng.Intn(i+1)
+    newIdx := math.Floor(rng.NormFloat64() * stdv + float64(i) + 0.5)
+    j := int(math.Mod(math.Abs(newIdx), float64(n)))
     if j != i {
       result[i] = result[j]
     }
