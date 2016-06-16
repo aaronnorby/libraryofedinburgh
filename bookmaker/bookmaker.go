@@ -13,7 +13,7 @@ import (
   "time"
 )
 
-func makeBook(fileName string) ([]byte, error) {
+func MakeBook(fileName string) ([]byte, error) {
   // makeBook takes a text file and generates a permutation of the words in that
   // text. Note that each continuous whitespace counts as a word.
   // At this point, it simply returns a randomly shuffled version of the text
