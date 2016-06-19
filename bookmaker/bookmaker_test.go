@@ -40,19 +40,19 @@ func TestShuffle(t *testing.T) {
 
 func TestMakeBook(t *testing.T) {
 	filename := "testdata/exampletext.txt"
-	textPerm1, _, err := MakeBook(filename, 0)
+	book1, err := MakeBook(filename, 0)
 	if err != nil {
 		t.Errorf("Error in makeBook(%q): %v", filename, err)
 	}
 	// for go test -v show the permutation
-	t.Log("\n" + string(textPerm1))
+	t.Log("\n" + string(book1.Text))
 
-	textPerm2, _, err := MakeBook(filename, 0)
+	book2, err := MakeBook(filename, 0)
 	if err != nil {
 		t.Errorf("Error in makeBook(%q), second call: %v", filename, err)
 	}
 
-	if string(textPerm1) == string(textPerm2) {
+	if string(book1.Text) == string(book2.Text) {
 		t.Errorf("Subsequent book permutations are the same. Should be different.")
 	}
 }
@@ -60,19 +60,19 @@ func TestMakeBook(t *testing.T) {
 func TestMakeBookWithSeed(t *testing.T) {
 	// test generating and reusing a random seed to reproduce a text
 	filename := "testdata/exampletext.txt"
-	text1, seed1, err := MakeBook(filename, 0)
+	book1, err := MakeBook(filename, 0)
 	if err != nil {
 		t.Errorf("Error in MakeBook(%q): %v", filename, err)
 	}
-	text2, seed2, err := MakeBook(filename, seed1)
+	book2, err := MakeBook(filename, book1.Seed)
 	if err != nil {
 		t.Errorf("Error in MakeBook(%q): %v", filename, err)
 	}
 
-	if seed1 != seed2 {
-		t.Errorf("Returned seed %q != %q, should be equal", seed1, seed2)
+	if book1.Seed != book2.Seed {
+		t.Errorf("Returned seed %q != %q, should be equal", book1.Seed, book2.Seed)
 	}
-	if string(text1) != string(text2) {
+	if string(book1.Text) != string(book2.Text) {
 		t.Errorf("Texts built with same seed not equal, should be equal")
 	}
 }

@@ -13,7 +13,12 @@ import (
 	"time"
 )
 
-func MakeBook(fileName string, seed int64) ([]byte, int64, error) {
+type Book struct {
+	Text []byte
+	Seed int64
+}
+
+func MakeBook(fileName string, seed int64) (*Book, error) {
 	// MakeBook takes a text file and generates a permutation of the words in that
 	// text. Note that each continuous whitespace counts as a word.
 	// The text returned is a permutation where the new position of each word is
@@ -24,13 +29,13 @@ func MakeBook(fileName string, seed int64) ([]byte, int64, error) {
 	file, err := os.Open(fileName)
 	defer file.Close()
 	if err != nil {
-		return nil, seed, fmt.Errorf("error opening file %q: %v", fileName, err)
+		return nil, fmt.Errorf("error opening file %q: %v", fileName, err)
 	}
 
 	// note: text is a []byte, as strings are just byte slices
 	text, err := ioutil.ReadAll(file)
 	if err != nil {
-		return nil, seed, fmt.Errorf("error reading file %q: %v", fileName, err)
+		return nil, fmt.Errorf("error reading file %q: %v", fileName, err)
 	}
 
 	// now we want a string slice of all the words, including newline 'words' (not
@@ -58,7 +63,8 @@ func MakeBook(fileName string, seed int64) ([]byte, int64, error) {
 	shuffledWords, seed := shuffle(words, seed)
 	wordsAsByteSlice := []byte(strings.Join(shuffledWords, " "))
 
-	return wordsAsByteSlice, seed, nil
+	book := &Book{Text: wordsAsByteSlice, Seed: seed}
+	return book, nil
 }
 
 func countNewlinesRun(s []byte) map[int]int {
