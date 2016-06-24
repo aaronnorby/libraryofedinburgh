@@ -71,8 +71,9 @@ func countNewlinesRun(s []byte) map[int]int {
 	// find paragraph and heading breaks by counting runs of >1 newline character
 	runs := make(map[int]int)
 	var run int
+
 	for _, char := range s {
-		if string(char) == "\n" {
+		if char == 10 || char == 13 {
 			run++
 		} else if run > 1 {
 			runs[run]++
