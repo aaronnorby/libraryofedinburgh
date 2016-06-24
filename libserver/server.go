@@ -1,6 +1,7 @@
 package libserver
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -20,6 +21,7 @@ func Serve() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/book", bookHandler)
 
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(port, nil))
@@ -66,10 +68,15 @@ func bookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	book, seed, err := bookmaker.MakeBook(bookFile, seed)
+	book, err := bookmaker.MakeBook(bookFile, seed)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// send back &book.Text, which  is a []byte
+	// This is a stand in. Actual response should be json, along with the seed - ie,
+	// serialize book
+	fmt.Fprintf(w, "%v", string(book.Text))
 
 }

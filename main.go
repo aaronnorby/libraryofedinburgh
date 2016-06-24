@@ -1,15 +1,7 @@
 package main
 
-import (
-  "fmt"
-  "log"
-
-  "library-of-edinburgh/getTexts"
-)
+import "libraryofedinburgh/libserver"
 
 func main() {
-  err := getTexts.GetAndSave(); if err != nil {
-    log.Fatal(err)
-  }
-  fmt.Println("treatise.txt created.")
+	libserver.Serve()
 }
