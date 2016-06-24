@@ -106,7 +106,7 @@ func shuffle(words []string, seed int64) ([]string, int64) {
 	rng := rand.New(rand.NewSource(seed))
 	for i := 0; i < n; i++ {
 		newIdx := math.Floor(rng.NormFloat64()*stdv + float64(i) + 0.5)
-		j := int(math.Mod(math.Abs(newIdx), float64(n)))
+		j := int(math.Mod(math.Abs(newIdx), float64(i+1)))
 		if j != i {
 			result[i] = result[j]
 		}
