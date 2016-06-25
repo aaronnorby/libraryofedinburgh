@@ -1,7 +1,7 @@
 package libserver
 
 import (
-	"fmt"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -68,15 +68,25 @@ func bookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	// TODO: cache most recent books
 	book, err := bookmaker.MakeBook(bookFile, seed)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// send back &book.Text, which  is a []byte
-	// This is a stand in. Actual response should be json, along with the seed - ie,
-	// serialize book
-	fmt.Fprintf(w, "%v", string(book.Text))
+	bookString := struct {
+		Text string `json:"text"`
+		Seed int64  `json:"seed"`
+	}{
+		string(book.Text),
+		book.Seed,
+	}
+	bookJson, err := json.Marshal(bookString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(bookJson)
 
 }
