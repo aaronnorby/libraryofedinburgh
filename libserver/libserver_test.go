@@ -30,7 +30,6 @@ func TestCache(t *testing.T) {
 		t.Error("most recently accessed element should be at front of list, instead got %q", front.Value)
 	}
 
-	// TODO: test for ejection of old items
 	currBack := cache.list.Back()
 	cache.Add(4, "and another")
 	newBack := cache.list.Back()
