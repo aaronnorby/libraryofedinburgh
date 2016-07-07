@@ -6,23 +6,28 @@ import (
 
 // ServeCache functions as a monitor goroutine to broker concurrent interactions
 // with a single lru cache. Its pattern is adapted from 'The Go Programming Language'.
+// Note that the keys used to access the cache serve as seeds to the MakeBook
+// function
 func (cServer *CacheServer) ServeCache(cap int) {
 	cache := NewCache(cap)
 	for req := range cServer.requests {
 		// TODO need a check that this type cast works, ie that the key is valid
-		report := cache.Get(req.key).(*bookReport) // TODO: this must be protected because it mutates the cache
-		if report == nil {
+		// note: cache.Get mutates the cache, but this is ok here since the cacheServer
+		// will only do one get at a time
+		report, ok := cache.Get(req.key).(*bookReport)
+		if !ok && report == nil {
 			report = &bookReport{ready: make(chan struct{})}
 			cache.Add(req.key, report)
-			report.book.Seed = req.key.(int64)
-			go report.getBook()
+			// report.book.Seed = req.key.(int64)
+			go report.getBook(req.key.(int64))
 		}
-		go report.sendBook(&req)
+		go report.sendBook(req.response)
 	}
 }
 
-func NewCacheServer() *CacheServer {
+func NewCacheServer(cap int) *CacheServer {
 	cs := CacheServer{make(chan request)}
+	go cs.ServeCache(cap)
 	return &cs
 }
 
@@ -56,9 +61,9 @@ type bookReport struct {
 	ready chan struct{}
 }
 
-func (b *bookReport) getBook() {
+func (b *bookReport) getBook(seed int64) {
 	// TODO: don't hardcode filepath. Should be const defined in libserver
-	newBook, err := bookmaker.MakeBook("texts/exampletext.txt", b.book.Seed)
+	newBook, err := bookmaker.MakeBook("texts/exampletext.txt", seed)
 	if err != nil {
 		b.err = err
 	}
@@ -66,7 +71,7 @@ func (b *bookReport) getBook() {
 	close(b.ready)
 }
 
-func (b *bookReport) sendBook(req *request) {
+func (b *bookReport) sendBook(response chan<- *bookReport) {
 	<-b.ready
-	req.response <- b
+	response <- b
 }
