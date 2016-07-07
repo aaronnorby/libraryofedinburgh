@@ -1,6 +1,7 @@
 package libserver
 
 import (
+	"sync"
 	"testing"
 )
 
@@ -44,4 +45,33 @@ func TestCache(t *testing.T) {
 		t.Error("Cache did not eject the oldest item")
 	}
 
+}
+
+func TestCacheServer(t *testing.T) {
+	var wg sync.WaitGroup
+	results := make(chan int64)
+	cs := NewCacheServer(2)
+
+	seeds := []int64{1, 2, 3, 2}
+	for _, i := range seeds {
+		wg.Add(1)
+		go func(i int64) {
+			defer wg.Done()
+			book, err := cs.Get(i)
+			if err != nil {
+				t.Errorf("Error getting from cache with seed: %v", err)
+			}
+			results <- book.Seed
+		}(i)
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+		cs.Close()
+	}()
+	for result := range results {
+		t.Logf("returned seed: %v\n", result)
+	}
+	t.Log("done waiting")
 }
