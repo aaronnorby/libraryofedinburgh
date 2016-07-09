@@ -1,6 +1,8 @@
 package libserver
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"sync"
 	"testing"
 )
@@ -74,4 +76,36 @@ func TestCacheServer(t *testing.T) {
 		t.Logf("returned seed: %v\n", result)
 	}
 	t.Log("done waiting")
+}
+
+func TestIndexHandler(t *testing.T) {
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(indexHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("indexHandler returned status %v, should have returned %v", status, http.StatusOK)
+	}
+}
+
+func TestIndexHandler404(t *testing.T) {
+	req, err := http.NewRequest("GET", "badpath", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(indexHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("indexHandler returned status %v, should have returned %v", status, http.StatusNotFound)
+	}
 }

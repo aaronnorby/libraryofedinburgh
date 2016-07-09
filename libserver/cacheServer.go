@@ -52,7 +52,7 @@ func (cServer *CacheServer) Get(key interface{}) (*bookmaker.Book, error) {
 
 type request struct {
 	key      interface{}
-	response chan *bookReport // should be more restrictive
+	response chan *bookReport
 }
 
 type bookReport struct {
@@ -62,8 +62,7 @@ type bookReport struct {
 }
 
 func (b *bookReport) getBook(seed int64) {
-	// TODO: don't hardcode filepath. Should be const defined in libserver
-	newBook, err := bookmaker.MakeBook("texts/exampletext.txt", seed)
+	newBook, err := bookmaker.MakeBook(bookFile, seed)
 	if err != nil {
 		b.err = err
 	}
