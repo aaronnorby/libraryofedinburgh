@@ -55,8 +55,10 @@ func Serve(opts Opts) {
 
 	// any requests for static will get sent to the designated static dir
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.Handle("/", fs)
 
-	http.HandleFunc("/", indexHandler)
+	// not using this handler, which is where the custom 404 logic is
+	// http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/book", bookHandler)
 
 	log.Println("Listening on port " + port)
@@ -81,6 +83,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	// custom 404 page (or 500 error if opening the page fails). Otherwise, serves
 	// the index page.
 	staticDir := serverOpts.StaticDir
+	log.Println(staticDir)
 	var fourOhFour string
 	if fourOhFour = serverOpts.FourOhFourPath; fourOhFour == "" {
 		libserverStaticDir, _ := getStaticDir()

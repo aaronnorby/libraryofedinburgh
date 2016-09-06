@@ -1,0 +1,13 @@
+@import '_reset';
+
+$background-color: #fff;
+$text-color: #000;
+
+* {
+  box-sizing: border-box;   
+}
+
+html {
+  background: $background-color;
+  color: $text-color;
+}
