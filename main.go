@@ -3,5 +3,6 @@ package main
 import "libraryofedinburgh/libserver"
 
 func main() {
-	libserver.Serve()
+	opts := libserver.Opts{StaticDir: "webapp"}
+	libserver.Serve(opts)
 }

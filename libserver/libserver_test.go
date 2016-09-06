@@ -79,6 +79,8 @@ func TestCacheServer(t *testing.T) {
 }
 
 func TestIndexHandler(t *testing.T) {
+	// set static directory to default
+	serverOpts.StaticDir, _ = getStaticDir()
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
 		t.Fatal(err)
