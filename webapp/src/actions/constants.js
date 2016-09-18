@@ -1,0 +1,6 @@
+export const FETCHING_BOOK_START = 'FETCHING_BOOK';
+export const FETCH_BOOK_COMPLETE = 'FETCH_BOOK_COMPLETE';
+
+export const ACTION_ONE         = 'ACTION_ONE';
+export const ASYNC_ACTION_START = 'ASYNC_ACTION_START';
+export const ASYNC_ACTION_END   = 'ASYNC_ACTION_END';

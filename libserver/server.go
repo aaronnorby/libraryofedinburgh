@@ -121,7 +121,8 @@ func bookHandler(w http.ResponseWriter, r *http.Request) {
 
 	seed, err := strconv.ParseInt(key, 10, 64)
 	if err != nil {
-		// temporary error handling solution TODO
+		// temporary error handling solution TODO. Right now will crash the server if
+		// key can't be parsed as an int
 		log.Fatal(err)
 	}
 

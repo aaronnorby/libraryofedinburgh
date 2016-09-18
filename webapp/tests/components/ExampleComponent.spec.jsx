@@ -3,7 +3,7 @@ import * as TestUtils from 'react-addons-test-utils';
 
 import ExampleComponent from '../../src/components/ExampleComponent';
 
-describe('ExampleComponent', () => {
+xdescribe('ExampleComponent', () => {
 
   it('Should exist', () => {
     const component = TestUtils.renderIntoDocument(<ExampleComponent />);

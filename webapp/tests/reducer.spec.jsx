@@ -1,27 +1,37 @@
 import * as TestUtils from 'react-addons-test-utils';
 
-import reducer from '../src/reducers/reducer';
+import { default as bookReducer } from '../src/reducers/book';
+import { FETCHING_BOOK_START, FETCH_BOOK_COMPLETE } from '../src/actions/constants';
 
 describe('reducer', () => {
   it('sets an initial state', () => {
-    let state = reducer(undefined, {});
-    expect(state.someProp).to.equal('old prop');
+    let state = bookReducer(undefined, {});
+    expect(state.isFetching).to.equal(false);
+    expect(state.data).to.deep.equal({});
+    expect(state.error).to.deep.equal({});
   });
 
-  it('sets someProp with ACTION_ONE', () => {
-    const INITIAL_STATE = {
-      someProp: 'some value',
-      data: 'some data',
-      isFetching: false
-    }
-
+  it('sets isFetching on fetch start', () => {
     const action = {
-      type: 'ACTION_ONE',
-      someProp: 'new value'
+      type: FETCHING_BOOK_START
+    };
+
+    let nextState = bookReducer(undefined, action);
+
+    expect(nextState.isFetching).to.equal(true);
+  });
+
+  it('sets book data on fetch book complete', () => {
+    const action = {
+      type: FETCH_BOOK_COMPLETE,
+      data: 'fake data',
+      error: null
     }
 
-    const nextState = reducer(INITIAL_STATE, action);
+    let nextState = bookReducer(undefined, action);
 
-    expect(nextState.someProp).to.equal('new value');
+    expect(nextState.isFetching).to.equal(false);
+    expect(nextState.data).to.equal('fake data');
+    expect(nextState.error).to.equal(null);
   });
 });

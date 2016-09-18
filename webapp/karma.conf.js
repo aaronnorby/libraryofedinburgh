@@ -10,8 +10,8 @@ module.exports = function(config) {
       'tests.bundle.js'
     ],
 
-    frameworks: ['chai', 'mocha'],
-    
+    frameworks: ['chai', 'mocha', 'sinon-chai'],
+
     plugins: [
       'karma-chrome-launcher',
       'karma-chai-plugins',
@@ -29,7 +29,7 @@ module.exports = function(config) {
     },
 
     reporters: ['dots'],
-    
+
     singleRun: true,
 
     webpack: webpackConfig

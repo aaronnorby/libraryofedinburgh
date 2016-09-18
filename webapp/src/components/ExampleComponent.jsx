@@ -1,18 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 
 export default class ExampleComponent extends Component {
-  
+
   handleClick(e) {
     this.props.actionOne('new prop');
     this.props.asyncAction();
   }
 
+  handleBookClick(e) {
+    this.props.fetchBook();
+  }
+
   render() {
     return (
-      <header onClick={e => this.handleClick(e)}>
-        <h1>{this.props.data}</h1>
-        <h2>{this.props.someProp}</h2>
-      </header>
+      <div>
+        <header onClick={e => this.handleClick(e)}>
+          <h2>{this.props.someProp}</h2>
+        </header>
+        <div>
+          <h1 onClick={e => this.handleBookClick(e)}>Get a book</h1>
+        </div>
+      </div>
     )
   }
 }
@@ -20,6 +28,10 @@ export default class ExampleComponent extends Component {
 ExampleComponent.propTypes = {
   actionOne: PropTypes.func.isRequired,
   asyncAction: PropTypes.func.isRequired,
-  data: PropTypes.string.isRequired,
-  someProp: PropTypes.string  // not required
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  fetchBook: PropTypes.func,
+  someProp: PropTypes.string,  // not required
 }

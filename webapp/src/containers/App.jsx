@@ -1,43 +1,49 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators }          from 'redux';
 import { connect }                     from 'react-redux';
-import * as ActionCreators                   from '../actions/index';
-import ExampleComponent                from '../components/ExampleComponent';
+import { fetchBook }                   from '../actions/index';
+import BookDisplay from '../components/BookDisplay';
+import FinderPanel from '../components/FinderPanel';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.getABook = this.getABook.bind(this);
+  }
+
+  getABook(seed) {
+    const { dispatch } = this.props;
+    dispatch(fetchBook(seed));
+  }
 
   render() {
     return (
       <div>
-        <ExampleComponent
-          data={this.props.data}
-          actionOne={this.props.actions.actionOne}
-          asyncAction={this.props.actions.performAsyncAction}
-          someProp={this.props.someProp}
-        />
+        <FinderPanel
+          getABook={this.getABook}
+          isFetching={this.props.book.isFetching} />
+        <BookDisplay
+          book={this.props.book} />
       </div>
     )
   }
 }
 
 App.propTypes = {
-  actions: PropTypes.object.isRequired,
-  data: PropTypes.string.isRequired,
-  someProp: PropTypes.string.isRequired
+  book: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 
-// connect App to redux store and export the connected version
+// connect App to redux store state and export the connected version
 function mapStateToProps(state) {
-  return state;
-}
-
-function mapActionCreatorsToProps(dispatch) {
+  const { book } = state;
   return {
-    actions: bindActionCreators(ActionCreators, dispatch),
-  }
+    book: book
+  };
 }
 
 export default connect(
-    mapStateToProps,
-    mapActionCreatorsToProps)(App);
+    mapStateToProps
+)(App);
