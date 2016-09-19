@@ -123,7 +123,12 @@ func bookHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// temporary error handling solution TODO. Right now will crash the server if
 		// key can't be parsed as an int
-		log.Fatal(err)
+		const msg = "Seed must be an integer"
+		w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(msg))
+		return
 	}
 
 	var book *bookmaker.Book

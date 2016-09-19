@@ -1,4 +1,5 @@
 GULP = $(PWD)/node_modules/.bin/gulp
+KARMA = $(PWD)/node_modules/.bin/karma
 
 run:
 	  $(GULP) run
@@ -9,4 +10,7 @@ clean:
 build:
 		$(GULP) build
 
-.PHONY: run clean build
+test:
+		$(KARMA) start
+
+.PHONY: run clean build test

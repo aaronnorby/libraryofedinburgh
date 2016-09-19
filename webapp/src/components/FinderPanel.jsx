@@ -5,22 +5,53 @@ export default class FinderPanel extends Component {
     super(props);
 
     this.getBook = this.getBook.bind(this);
+
+    this.state = {
+      error: null
+    };
   }
 
   render() {
     return (
       <div>
-        <button onClick={this.getBook}>
-          Get a book
-        </button>
-        <input type="text" placeholder="seed" />
+        {this.renderError()}
+        <form onSubmit={this.getBook}>
+          <button type="submit">
+            Get a book
+          </button>
+          <input name="seed" type="text" placeholder="seed" />
+        </form>
       </div>
     );
   }
 
   getBook(e) {
-    let seed;
+    e.preventDefault();
+    let seed = e.target.seed.value;
+    let valid = this.checkSeedValidity(seed);
+    if (!valid) {
+      this.setState({ error: "Invalid seed. Seed must be integer." });
+      return;
+    }
     this.props.getABook(seed);
+  }
+
+  checkSeedValidity(seed) {
+    // we can't used parseInt because it's annoying and will return an int so long
+    // as the first character of the string it's given is an int.
+    // parseInt("1asdfas") === 1, not NaN. So we use unary plus operator.
+    let n = +seed;
+    return !isNaN(n);
+  }
+
+  renderError() {
+    if (this.state.error === null) return;
+
+    return (
+      <div className="error">
+        <h2 className="error-message">{this.state.error}</h2>
+      </div>
+    );
   }
 }
 
