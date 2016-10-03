@@ -12,9 +12,9 @@ require('./styles/main.scss');
 // server-side rendering window._INITIAL_STATE
 const store = configureStore();
 
-if (process.env.NODE_ENV === 'development') {
-  window.devToolsExtension && window.devToolsExtension.open();
-}
+// if (process.env.NODE_ENV === 'development') {
+//   window.devToolsExtension && window.devToolsExtension.open();
+// }
 
 render(
   <Provider store={store}>

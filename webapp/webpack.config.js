@@ -15,7 +15,11 @@ module.exports = {
     },
     {
       test: /\.scss$/,
-      loader: 'style!css?sourceMap!sass?sourceMap'
+      loaders: ['style', 'css?sourceMap', 'sass-loader?sourceMap']
+    },
+    {
+      test: /\.jpg$/,
+      loader: 'file-loader'
     }]
   },
   resolve: {
@@ -23,12 +27,8 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist',
-    publicPath: '/',
+    publicPath: 'http://localhost:8080/',
     filename: 'bundle.js'
-  },
-  devServer: {
-    contentBase: './dist',
-    hot: true
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

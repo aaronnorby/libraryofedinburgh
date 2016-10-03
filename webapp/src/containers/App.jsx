@@ -4,6 +4,7 @@ import { connect }                     from 'react-redux';
 import { fetchBook }                   from '../actions/index';
 import BookDisplay from '../components/BookDisplay';
 import FinderPanel from '../components/FinderPanel';
+import SiteHeader from '../components/SiteHeader';
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <SiteHeader />
         <FinderPanel
           getABook={this.getABook}
           isFetching={this.props.book.isFetching} />

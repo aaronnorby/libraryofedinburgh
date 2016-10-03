@@ -1,13 +1,95 @@
-@import '_reset';
+@import 'normalize';
 
 $background-color: #fff;
 $text-color: #000;
+$body-width: 75%;
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  background: $background-color;
-  color: $text-color;
+.site-header {
+  h1.site-header__heading {
+    color: $text-color;
+    font-size: 32px;
+    margin-left: 20px;
+  }
+
+  .site-explainer {
+    font-size: 21px;
+    margin: auto;
+    width: $body-width;
+  }
+}
+
+.finder-panel {
+  position: relative;
+
+  .hume-spinner {
+    background-image: url("./assets/hume_hat.jpg");
+    background-size: contain;
+    border-radius: 3px;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    top: 10px;
+    left: 50%;
+    transform: scale(0);
+
+    &.pulse {
+      animation: pulse 1.5s linear alternate infinite;
+    }
+  }
+
+  border: 1px solid black;
+  border-radius: 6px;
+  margin: auto;
+  padding: 15px;
+  width: $body-width;
+  min-width: 340px;
+
+  button {
+    background: none;
+    border: 1px solid black;
+    border-radius: 3px;
+
+    &:hover {
+      background: #FA93E2;
+    }
+  }
+
+  button, input {
+    padding: 10px;
+  }
+
+  input {
+    border: 1px solid #B7B6BD;
+    border-radius: 3px;
+    margin-left: 15px;
+  }
+}
+
+.book-display {
+  margin: auto;
+  margin-top: 25px;
+  width: $body-width;
+
+  .book-display__book {
+    border: 1px solid #000;
+    height: 500px;
+    overflow: scroll;
+    padding: 10px;
+    margin-top: 50px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.1);
+    border-radius: 100%;
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }

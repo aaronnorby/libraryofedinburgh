@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 export default class FinderPanel extends Component {
   constructor(props) {
@@ -12,8 +13,13 @@ export default class FinderPanel extends Component {
   }
 
   render() {
+    let spinnerClasses = classNames({
+      "hume-spinner": true,
+      pulse: this.props.isFetching
+    });
+
     return (
-      <div>
+      <div className="finder-panel">
         {this.renderError()}
         <form onSubmit={this.getBook}>
           <button type="submit">
@@ -21,6 +27,7 @@ export default class FinderPanel extends Component {
           </button>
           <input name="seed" type="text" placeholder="seed" />
         </form>
+        <div className={spinnerClasses}></div>
       </div>
     );
   }
