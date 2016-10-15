@@ -47,6 +47,10 @@ func MakeBook(fileName string, seed int64) (*Book, error) {
 	words := strings.Fields(string(text))
 
 	// add newline chars back to our string slice
+	if seed == 0 {
+		seed = time.Now().UnixNano()
+	}
+	rng := rand.New(rand.NewSource(seed))
 	for runLength, count := range newlinesCount {
 		var run bytes.Buffer
 		for i := 0; i < runLength; i++ {
@@ -54,7 +58,10 @@ func MakeBook(fileName string, seed int64) (*Book, error) {
 		}
 		runString := run.String()
 		for i := 0; i < count; i++ {
-			words = append(words, runString)
+			newlineIndex := rng.Intn(len(words))
+			tmp := words[newlineIndex]
+			words[newlineIndex] = runString
+			words = append(words, tmp)
 		}
 	}
 
