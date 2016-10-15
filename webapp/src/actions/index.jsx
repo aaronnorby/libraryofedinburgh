@@ -33,11 +33,16 @@ export function fetchBook(seed) {
   let url = bookUrl + qs;
   return dispatch => {
     dispatch(startFetchBook());
+    let startTime = Date.now();
     return fetch(url, {mode: 'cors'}).then(function(book) {
       return book.json();
     })
     .then(function(bookJson) {
-      dispatch(fetchBookComplete(null, bookJson));
+      let timeDelta = Date.now() - startTime;
+      let wait = Math.max(0, 3000 - timeDelta);
+      setTimeout(() => {
+        dispatch(fetchBookComplete(null, bookJson));
+      }, wait);
     })
     .catch(function(err) {
       dispatch(fetchBookComplete(err, {}));

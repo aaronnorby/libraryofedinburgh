@@ -37,6 +37,7 @@ export default class BookDisplay extends Component {
   }
 
   renderBookError() {
+    // TODO: error messaging
     return;
   }
 
