@@ -36,7 +36,7 @@ export function fetchBook(seed) {
     })
     .then(function(bookJson) {
       let timeDelta = Date.now() - startTime;
-      let wait = Math.max(0, 3000 - timeDelta);
+      let wait = Math.max(0, 5000 - timeDelta);
       setTimeout(() => {
         dispatch(fetchBookComplete(null, bookJson));
       }, wait);
