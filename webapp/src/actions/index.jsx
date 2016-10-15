@@ -1,7 +1,4 @@
 import {
-  ACTION_ONE,
-  ASYNC_ACTION_START,
-  ASYNC_ACTION_END,
   FETCHING_BOOK_START,
   FETCH_BOOK_COMPLETE
 } from './constants';
@@ -49,36 +46,3 @@ export function fetchBook(seed) {
     });
   }
 }
-
-
-
-export function actionOne(payload) {
-  return {
-    type: ACTION_ONE,
-    someProp: payload
-  }
-}
-
-function startAsyncAction() {
-  return {
-    type: ASYNC_ACTION_START
-  }
-}
-
-function endAsyncAction(payload) {
-  return {
-    type: ASYNC_ACTION_END,
-    returnedData: payload
-  }
-}
-
-export function performAsyncAction() {
-  return dispatch => {
-    dispatch(startAsyncAction());
-    setTimeout(function() {
-      let payload = 'Hello from app!';
-      dispatch(endAsyncAction(payload));
-    }, 0);
-  }
-}
-
