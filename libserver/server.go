@@ -13,13 +13,13 @@ import (
 )
 
 const (
-	port          string = ":8000"
 	cacheCapacity int    = 3
 	bookFile      string = "texts/treatise.txt"
 )
 
 type Opts struct {
 	StaticDir, FourOhFourPath string
+	FileServe                 bool
 }
 
 var serverOpts Opts
@@ -28,6 +28,11 @@ var serverOpts Opts
 var cs *CacheServer = NewCacheServer(cacheCapacity)
 
 func Serve(opts Opts) {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+	}
+
 	if opts.StaticDir != "" {
 		wd, err := os.Getwd()
 		if err != nil {
@@ -51,18 +56,22 @@ func Serve(opts Opts) {
 		serverOpts.FourOhFourPath = filepath.Join(wd, opts.FourOhFourPath)
 	}
 
-	fs := http.FileServer(http.Dir(serverOpts.StaticDir))
+	if opts.FileServe == true {
+		fs := http.FileServer(http.Dir(serverOpts.StaticDir))
 
-	// any requests for static will get sent to the designated static dir
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	http.Handle("/", fs)
+		// any requests for static will get sent to the designated static dir
+		http.Handle("/static/", http.StripPrefix("/static/", fs))
+		http.Handle("/", fs)
 
-	// not using this handler, which is where the custom 404 logic is
-	// http.HandleFunc("/", indexHandler)
+		// not using this handler, which is where the custom 404 logic is
+		// http.HandleFunc("/", indexHandler)
+	}
+
+	// API handler
 	http.HandleFunc("/book", bookHandler)
 
 	log.Println("Listening on port " + port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func getStaticDir() (string, error) {
