@@ -12,8 +12,6 @@ ADD ./texts texts/
 
 ADD webapp/dist webapp/dist/
 
-RUN go build application.go
-
-ENTRYPOINT /go/src/libraryofedinburgh/application
+CMD ["go", "run", "application.go"]
 
 EXPOSE 3000

@@ -28,16 +28,8 @@ gulp.task('webpack:serve', function(cb) {
   });
 });
 
-// Dev build
-gulp.task('dev-build', ['webpack:buildDev']);
-gulp.task('webpack:buildDev', function(cb) {
-  webpack(devConfig, function(err, stats) {
-    if (err) throw new gutil.PluginError("webpack:buildDev", err);
-    gutil.log("[webpack:buildDev]", stats.toString({
-      colors: true
-    }));
-    cb();
-  });
+gulp.task('watch', function() {
+  gulp.watch('src/**/*.*', ['build']);
 });
 
 // Production build
@@ -58,3 +50,5 @@ gulp.task('clean', function() {
     'dist/'
   ]);
 });
+
+gulp.task('default', ['dev-build', 'watch']);

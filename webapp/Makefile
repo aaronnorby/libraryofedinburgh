@@ -10,10 +10,10 @@ clean:
 build:
 		$(GULP) build
 
-devbuild:
-		$(GULP) dev-build
+watch:
+		$(GULP) watch
 
 test:
 		$(KARMA) start
 
-.PHONY: run clean build test dev-build
+.PHONY: run clean build test
