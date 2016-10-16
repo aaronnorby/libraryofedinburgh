@@ -20,6 +20,10 @@ $body-width: 75%;
     margin: auto;
     width: $body-width;
   }
+
+  .title {
+    font-style: italic;
+  }
 }
 
 .finder-panel {
