@@ -7,10 +7,7 @@ import {
 export const INITIAL_STATE = {};
 
 // action creators:
-const devAPI = 'http://localhost:5000/book';
-const prodAPI = 'http://localhost:5000/book';
-const bookUrl = process.env.NODE_ENV === 'development' ? devAPI : prodAPI;
-
+const bookUrl = '/book'
 
 export function startFetchBook() {
   return {

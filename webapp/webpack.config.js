@@ -27,7 +27,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist',
-    publicPath: 'http://localhost:8080/',
+    //publicPath: 'http://localhost:8080/',
     filename: 'bundle.js'
   },
   plugins: [

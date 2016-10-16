@@ -28,6 +28,18 @@ gulp.task('webpack:serve', function(cb) {
   });
 });
 
+// Dev build
+gulp.task('dev-build', ['webpack:buildDev']);
+gulp.task('webpack:buildDev', function(cb) {
+  webpack(devConfig, function(err, stats) {
+    if (err) throw new gutil.PluginError("webpack:buildDev", err);
+    gutil.log("[webpack:buildDev]", stats.toString({
+      colors: true
+    }));
+    cb();
+  });
+});
+
 // Production build
 gulp.task('build', ['webpack:build']);
 gulp.task('webpack:build', function(cb) {

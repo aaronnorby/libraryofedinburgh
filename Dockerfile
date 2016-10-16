@@ -12,4 +12,8 @@ ADD ./texts texts/
 
 ADD webapp/dist webapp/dist/
 
-EXPOSE 5000
+RUN go build application.go
+
+ENTRYPOINT /go/src/libraryofedinburgh/application
+
+EXPOSE 3000

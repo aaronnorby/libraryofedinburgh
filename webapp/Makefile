@@ -10,7 +10,10 @@ clean:
 build:
 		$(GULP) build
 
+devbuild:
+		$(GULP) dev-build
+
 test:
 		$(KARMA) start
 
-.PHONY: run clean build test
+.PHONY: run clean build test dev-build

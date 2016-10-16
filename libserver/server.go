@@ -30,7 +30,7 @@ var cs *CacheServer = NewCacheServer(cacheCapacity)
 func Serve(opts Opts) {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "5000"
+		port = "3000"
 	}
 
 	if opts.StaticDir != "" {
